@@ -1,0 +1,296 @@
+html {
+    font-size: 62.5%; /* 1rem = 10px */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'IBM Plex Sans', sans-serif;
+}
+
+:root {    
+    --perus: #226f5d; 
+    --vaalea: #f2f2f2;
+    --tumma: #09366D;
+    --huomio: #f1a593;
+    --musta: #212121;
+    --valkoinen: #ffffff;
+    --disabled: #7094cd;
+}
+
+body {
+    background-color: var(--vaalea);
+    min-height: 100vh;
+    padding: max(5px, 2%);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    color: var(--perus);
+    font-size: clamp(4rem, 5.6vw + 2.8rem, 7rem);
+    font-weight: 700;
+}
+
+h2 {
+    color: var(--musta); 
+    font-size: clamp(2.4rem, 1.1vw + 2.2rem, 3rem);
+    font-weight: 300;
+    margin-bottom: 2rem;
+}
+
+/* Valkoiset alueet joissa kaikki sisältö */
+#peli, #tulokset {
+    background-color: var(--valkoinen);
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+    padding: 5rem;
+    border-radius: 20px;
+    box-shadow: 0px 4px 30px -10px rgba(0,0,0,0.1);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 5rem;
+    place-items: center;
+}
+
+/* Täysleveät grid-elementit */
+h1, h2, .button { 
+  grid-column: 1 / span 3; 
+}
+
+/* Kuvituskuvat */
+img {
+    width: 100%;
+    max-width: 40rem;
+}
+
+/* Valintojen ja tulosten ruudukot */
+.boksit, .voittoboksit {
+    color: var(--valkoinen);
+    font-size: clamp(1.6rem, 0.7vw + 1.4rem, 2rem);
+    font-weight: 300;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);  
+    gap: 1rem;
+}
+
+/* Pallo jonka sisällä checkbox */
+.boksi {
+    position: relative;
+    transition: 0.2s ease-out;  
+}
+
+.boksi:hover {
+    transform: scale(1.15);
+    box-shadow: 0px 10px 20px -10px rgba(0,0,0,0.1);
+}
+
+/* Pallojen koko ja asetukset */
+.boksi div, .voittoboksi div { 
+    width: 4.6rem;
+    height: 4.6rem;
+    padding: 1rem;
+    display: grid;
+    place-content: center;
+}
+
+/* Valinta-alue */
+.boksi input {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    cursor: pointer;
+    opacity: 0;
+    top: 0;
+    left: 0;
+}
+
+/* Pallojen yleiset asetukset */
+.boksi, input[type=checkbox] ~ div, 
+input[type=checkbox]:checked ~ div, 
+input[type=checkbox]:disabled ~ div,
+.voittoboksi {
+    border-radius: 100%;
+}
+
+input[type=checkbox] ~ div {
+    background-color: var(--tumma);
+    transition: 0.3s ease-out;
+}
+
+input[type=checkbox]:checked ~ div {
+    background-color: var(--huomio);
+	  -webkit-animation: pomppu 0.3s;
+	  animation: pomppu 0.3s;
+}
+
+input[type=checkbox]:disabled ~ div {
+    background-color: var(--tumma);
+    color: var(--disabled);
+}
+
+/* Arvonta- ja uudestaan-painike */
+.button {
+    background-color: var(--perus);
+    color: var(--valkoinen);
+    border: none;
+    border-radius: 100px;
+    padding: 2rem 4rem;
+    font-size: clamp(1.6rem, 0.7vw + 1.4rem, 2.0rem);
+    font-weight: 400;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.3s ease-out;
+}
+
+.button:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 10px 20px -3px rgba(0,0,0,0.1);
+}
+
+
+/*-------------------------
+---  ARVONNAN TULOKSET  ---
+-------------------------*/
+
+/* Unohdit valita luvut */
+#kissakuva {
+    margin-bottom: 5rem;
+}
+
+/* Lukujen ja tekstien alue */
+.tuloslaatikko {
+    grid-column: 1/2;
+    grid-row: 2/3;
+}
+
+/* Käyttäjän valitsemat luvut ja voittoluvut */
+.voittoboksit {
+    margin-bottom: 3rem;
+}
+
+/* Miten kävi */
+#tulokset h1{
+    -webkit-animation: suurennus 0.3s ease-in both;
+    animation: suurennus 0.3s ease-in both;
+}
+
+/* Käyttäjän luvut */
+#arvatut {
+    background-color: var(--huomio);
+}
+
+/* Arvotut luvut */
+#voitot {
+    background-color: var(--tumma);
+}
+
+
+/*-------------------------
+-------   MOBIILI   -------
+------------------------- */
+
+@media (max-width: 860px) {
+    #peli, #tulokset {
+        grid-template-columns: 1fr;
+        padding: 5rem 1rem;
+    }
+    h1, h2, .button {
+      grid-column: 1;
+    }
+}
+
+
+/*-------------------------
+----    ANIMAATIOITA   ----
+-------------------------*/
+
+/* Lukujen animaatiot */
+@-webkit-keyframes pomppu {
+    0% {
+        -webkit-transform: scale(1.2);
+                transform: scale(1.2);
+        -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in;
+        opacity: 0;
+    }
+    40% {
+        -webkit-transform: scale(1);
+                transform: scale(1);
+        -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out;
+        opacity: 1;
+    }
+    80% {
+        -webkit-transform: scale(1.1);
+                transform: scale(1.1);
+        -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in;
+    }
+
+    100% {
+        -webkit-transform: scale(1);
+                transform: scale(1);
+        -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out;
+    }
+}
+
+@keyframes pomppu {
+    0% {
+        -webkit-transform: scale(1.2);
+                transform: scale(1.2);
+        -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in;
+        opacity: 0;
+    }
+    40% {
+        -webkit-transform: scale(1);
+                transform: scale(1);
+        -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out;
+        opacity: 1;
+    }
+    80% {
+        -webkit-transform: scale(1.1);
+                transform: scale(1.1);
+        -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in;
+    }
+
+    100% {
+        -webkit-transform: scale(1);
+                transform: scale(1);
+        -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out;
+    }
+}
+
+
+/* Otsikon animaatio */
+
+@-webkit-keyframes suurennus {
+    0% {
+        -webkit-transform: scale(0.5);
+                transform: scale(0.5);
+    }
+    100% {
+        -webkit-transform: scale(1);
+                transform: scale(1);
+    }
+  }
+      
+  @keyframes suurennus {
+    0% {
+        -webkit-transform: scale(0.5);
+                transform: scale(0.5);
+    }
+    100% {
+        -webkit-transform: scale(1);
+                transform: scale(1);
+    }
+}
